@@ -19,13 +19,20 @@ class ManageSchedule extends Component {
             listDoctors: [],
             selectedDoctor: {},
             currentDate: '',
-            rangeTime: []
+            rangeTime: [],
+            isLoading:false
         }
     }
 
     componentDidMount() {
+        this.setState ({
+            isLoading:true
+        })
         this.props.fetchAllDoctors();
         this.props.fetchAllScheduleTime();
+        this.setState ({
+            isLoading:false
+        })
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -48,12 +55,12 @@ class ManageSchedule extends Component {
 
 
 
-        // if (prevProps.language !== this.props.language) {
-        //     let dataSelect = this.buildDataInputSelect(this.props.allDoctors)
-        //     this.setState({
-        //         listDoctors: dataSelect
-        //     })
-        // }
+        if (prevProps.language !== this.props.language) {
+            let dataSelect = this.buildDataInputSelect(this.props.allDoctors)
+            this.setState({
+                listDoctors: dataSelect
+            })
+        }
     }
 
     buildDataInputSelect = (inputData) => {
@@ -128,7 +135,9 @@ class ManageSchedule extends Component {
                 return;
             }
         }
-
+        this.setState ({
+            isLoading:true
+        })
         let res = await saveBulkScheduleDoctor({
             arrSchedule: result,
             doctorId: selectedDoctor.value,
@@ -142,6 +151,9 @@ class ManageSchedule extends Component {
             toast.error("errror saveBulkScheduleDoctor ");
             console.log('erorr saveBulkScheduleDoctor >>> res: ', res)
         }
+        this.setState ({
+            isLoading:false
+        })
 
     }
 
@@ -151,6 +163,7 @@ class ManageSchedule extends Component {
         let yesterday = new Date(new Date().setDate(new Date().getDate() - 1));
 
         return (
+            <>
             <div className="manage-schedule-container">
                 <div className="m-s-title">
                     <FormattedMessage id="manage-schedule.title" />
@@ -199,6 +212,11 @@ class ManageSchedule extends Component {
                     </div>
                 </div>
             </div>
+            {this.state.isLoading && (<div className='container-ring'><div className="ring">Loading...
+                        <span></span>
+                    </div></div>)}
+            </>
+            
         );
     }
 }

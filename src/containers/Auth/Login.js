@@ -14,7 +14,8 @@ class Login extends Component {
             username: '',
             password: '',
             isShowPassword: false,
-            errMessage: ''
+            errMessage: '',
+            isLoading:false
         }
     }
 
@@ -32,7 +33,8 @@ class Login extends Component {
 
     handleLogin = async () => {
         this.setState({
-            errMessage: ''
+            errMessage: '',
+            isLoading:true
         })
 
         try {
@@ -54,6 +56,9 @@ class Login extends Component {
                 }
             }
         }
+        this.setState ({
+            isLoading:false
+        })
     }
 
     handleShowHidePassword = () => {
@@ -70,7 +75,7 @@ class Login extends Component {
 
     render() {
         //JSX
-        return (
+        return (<>
             <div className="login-background">
                 <div className="login-container">
                     <div className="login-content row">
@@ -114,12 +119,16 @@ class Login extends Component {
                             <span className="text-other-login">Or Login with:</span>
                         </div>
                         <div className="col-12 social-login">
-                            <i className="fab fa-google-plus-g google"></i>
-                            <i className="fab fa-facebook-f facebook"></i>
+                            {/* <i className="fab fa-google-plus-g google"></i>
+                            <i className="fab fa-facebook-f facebook"></i> */}
                         </div>
                     </div>
                 </div>
             </div>
+            {this.state.isLoading && (<div className='container-ring'><div className="ring">Loading...
+            <span></span>
+        </div></div>)}
+        </>
         )
     }
 }

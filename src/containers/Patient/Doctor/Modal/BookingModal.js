@@ -29,13 +29,18 @@ class BookingModal extends Component {
             doctorId: '',
             genders: '',
             timeType: '',
-            isShowLoading: false
+            isLoading: false
         }
     }
 
     async componentDidMount() {
+        this.setState({
+            isLoading: true
+        })
         this.props.getGenders();
-
+        this.setState({
+            isLoading: false
+        })
 
     }
     buildDataGender = (data) => {
@@ -130,7 +135,7 @@ class BookingModal extends Component {
         //validate input
         // data.email || !data.doctorId || !data.timeType || !data.date
         this.setState({
-            isShowLoading: true
+            isLoading: true
         })
         let date = new Date(this.state.birthday).getTime();
         let timeString = this.buildTimeBooking(this.props.dataTime);
@@ -153,7 +158,7 @@ class BookingModal extends Component {
         })
 
         this.setState({
-            isShowLoading: false
+            isLoading: false
         })
 
         if (res && res.errCode === 0) {
@@ -173,11 +178,10 @@ class BookingModal extends Component {
         }
 
         return (
-            <LoadingOverlay
-                active={this.state.isShowLoading}
-                spinner
-                text='Loading...'
-            >
+
+            <>
+
+
                 <Modal
                     isOpen={isOpenModal}
                     className={'booking-modal-container'}
@@ -282,7 +286,13 @@ class BookingModal extends Component {
                         </div>
                     </div>
                 </Modal>
-            </LoadingOverlay>
+                {this.state.isLoading && (<div className='container-ring'><div className="ring">Loading...
+                        <span></span>
+                    </div></div>)}
+            </>
+
+
+            // </LoadingOverlay>
         );
     }
 }

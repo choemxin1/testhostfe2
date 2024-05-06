@@ -14,14 +14,19 @@ class ProfileDoctor extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dataProfile: {}
+            dataProfile: {},
+            isLoading: false
         }
     }
 
     async componentDidMount() {
+        this.setState ({
+            isLoading:true
+        })
         let data = await this.getInforDoctor(this.props.doctorId);
         this.setState({
-            dataProfile: data
+            dataProfile: data,
+            isLoading:false
         })
     }
 
@@ -80,7 +85,7 @@ class ProfileDoctor extends Component {
             nameEn = `${dataProfile.positionData.valueEn}, ${dataProfile.firstName} ${dataProfile.lastName}`;
         }
 
-        return (
+        return (<>
             <div className="profile-doctor-container">
                 <div className="intro-doctor">
                     <div
@@ -148,6 +153,10 @@ class ProfileDoctor extends Component {
                 }
 
             </div>
+            {this.state.isLoading && (<div className='container-ring'><div className="ring">Loading...
+                        <span></span>
+                    </div></div>)}
+            </>
         );
     }
 }

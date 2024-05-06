@@ -1,27 +1,27 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { FormattedMessage } from 'react-intl';
-import './ManageSpecialty.scss';
+import './ManageHandBook.scss';
 import MarkdownIt from 'markdown-it';
 import MdEditor from 'react-markdown-editor-lite';
 import { CommonUtils } from '../../../utils';
-import { createNewSpecialty } from '../../../services/userService';
+import { createNewHandBook } from '../../../services/userService';
 import { toast } from "react-toastify";
 
 
 
 const mdParser = new MarkdownIt(/* Markdown-it options */);
 
-class ManageSpecialty extends Component {
+class ManageHandBook extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             name: '',
+            isLoading: false,
             imageBase64: '',
             descriptionHTML: '',
             descriptionMarkdown: '',
-            isLoading:false
         }
     }
 
@@ -64,42 +64,41 @@ class ManageSpecialty extends Component {
         }
     }
 
-    handleSaveNewSpecialty = async () => {
-        this.setState ({
-            isLoading:true
+    handleSaveNewHandBook = async () => {
+        this.setState({
+            isLoading: true
         })
-        let res = await createNewSpecialty(this.state)
-        if (res && res.errCode === 0) {
-            toast.success('Add new specialty succeeds!')
+        let res = await createNewHandBook(this.state)
+        if (res?.errCode === 0) {
+            toast.success('Add new HandBook succeeds!')
             this.setState({
                 name: '',
                 imageBase64: '',
+
                 descriptionHTML: '',
                 descriptionMarkdown: '',
             })
         } else {
             toast.error('Something wrongs....')
-            console.log('>> hoi dan it check res: ', res)
+            console.log('>>  check res: ', res)
         }
-        this.setState ({
-            isLoading:false
+        this.setState({
+            isLoading: false
         })
     }
 
     render() {
 
         return (<>
-        <div className="manage-specialty-container">
+            <div className="manage-specialty-container">
                 <div className="ms-title">
-                <FormattedMessage id="manage-specialty.title" />
-
+                <FormattedMessage id="manage-handbook.title" />
                 </div>
 
                 <div className="add-new-specialty row">
                     <div className="col-6 form-group">
                         <label>
-                        <FormattedMessage id="manage-specialty.name" />
-
+                            <FormattedMessage id="manage-handbook.name" />
                         </label>
                         <input className="form-control" type="text" value={this.state.name}
                             onChange={(event) => this.handleOnChangeInput(event, 'name')}
@@ -108,13 +107,13 @@ class ManageSpecialty extends Component {
                     </div>
                     <div className="col-6 form-group">
                         <label>
-                        <FormattedMessage id="manage-specialty.image" />
-
+                            <FormattedMessage id="manage-handbook.image" />
                         </label>
                         <input className="form-control-file" type="file"
                             onChange={(event) => this.handleOnchangeImage(event)}
                         />
                     </div>
+
                     <div className="col-12">
                         <MdEditor
                             style={{ height: '300px' }}
@@ -125,20 +124,19 @@ class ManageSpecialty extends Component {
                     </div>
                     <div className="col-12">
                         <button className="btn-save-specialty"
-                            onClick={() => this.handleSaveNewSpecialty()}
+                            onClick={() => this.handleSaveNewHandBook()}
                         >
-                        <FormattedMessage id="manage-specialty.add" />
-
+                            <FormattedMessage id="manage-handbook.add" />
                         </button>
                     </div>
                 </div>
 
             </div>
             {this.state.isLoading && (<div className='container-ring'><div className="ring">Loading...
-            <span></span>
-        </div></div>)}
+                <span></span>
+            </div></div>)}
         </>
-            
+
         );
     }
 }
@@ -154,4 +152,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ManageSpecialty);
+export default connect(mapStateToProps, mapDispatchToProps)(ManageHandBook);

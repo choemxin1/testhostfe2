@@ -3,7 +3,7 @@ import {
     getAllCodeService, createNewUserService, getAllUsers,
     deteleUserService, editUserService, getTopDoctorHomeService,
     getAllDoctors, saveDetailDoctorService,
-    getAllSpecialty, getAllClinic
+    getAllSpecialty, getAllClinic,getAllHandBook
 } from "../../services/userService";
 import { toast } from "react-toastify";
 // export const fetchGenderStart = () => ({
@@ -42,6 +42,29 @@ export const fetchPositionSuccess = (positionData) => ({
     type: actionTypes.FETCH_POSITION_SUCCESS,
     data: positionData
 })
+
+export const fetchHandBooks = () => {
+    return async (dispatch, getState) => {
+        try {
+            let res = await getAllHandBook();
+            if (res && res.errCode === 0) {
+                dispatch({
+                    type: actionTypes.FETCH_HAND_BOOK_SUCCESS,
+                    dataHandBooks: res.data
+                })
+            } else {
+                dispatch({
+                    type: actionTypes.FETCH_HAND_BOOK_FAILDED
+                })
+            }
+        } catch (e) {
+            console.log('FETCH_HAND_BOOK_FAILDED: ', e)
+            dispatch({
+                type: actionTypes.FETCH_HAND_BOOK_FAILDED
+            })
+        }
+    }
+}
 
 export const fetchPositionFailed = () => ({
     type: actionTypes.FETCH_POSITION_FAIlDED
@@ -234,7 +257,7 @@ export const fetchAllDoctors = () => {
             if (res && res.errCode === 0) {
                 dispatch({
                     type: actionTypes.FETCH_ALL_DOCTORS_SUCCESS,
-                    dataDr: res.data
+                    dataDoctor: res.data
                 })
             } else {
                 dispatch({

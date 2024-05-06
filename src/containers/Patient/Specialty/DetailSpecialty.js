@@ -17,15 +17,18 @@ class DetailSpecialty extends Component {
         this.state = {
             arrDoctorId: [],
             dataDetailSpecialty: {},
-            listProvince: []
+            listProvince: [],
+            isLoading: false
         }
     }
 
 
     async componentDidMount() {
-        if (this.props.match && this.props.match.params && this.props.match.params.id) {
-            let id = this.props.match.params.id;
-
+        if (this.props.match?.params?.id) {
+            let id = this.props.match?.params?.id;
+            this.setState({
+                isLoading: true
+            })
             let res = await getAllDetailSpecialtyById({
                 id: id,
                 location: 'ALL'
@@ -33,7 +36,7 @@ class DetailSpecialty extends Component {
 
             let resProvince = await getAllCodeService('PROVINCE');
 
-            if (res && res.errCode === 0 && resProvince && resProvince.errCode === 0) {
+            if (res?.errCode === 0 && resProvince?.errCode === 0) {
                 let data = res.data;
                 let arrDoctorId = [];
                 if (data && !_.isEmpty(res.data)) {
@@ -62,12 +65,15 @@ class DetailSpecialty extends Component {
                     listProvince: dataProvince ? dataProvince : []
                 })
             }
+            this.setState({
+                isLoading: false
+            })
         }
     }
 
 
 
-    async componentDidUpdate(prevProps, prevState, snapshot) {
+    componentDidUpdate(prevProps, prevState, snapshot) {
         if (this.props.language !== prevProps.language) {
 
         }
@@ -76,16 +82,18 @@ class DetailSpecialty extends Component {
 
 
     handleOnChangeSelect = async (event) => {
-        if (this.props.match && this.props.match.params && this.props.match.params.id) {
-            let id = this.props.match.params.id;
+        if (this.props.match?.params?.id) {
+            let id = this.props.match?.params?.id;
             let location = event.target.value;
-
+            this.setState({
+                isLoading: true
+            })
             let res = await getAllDetailSpecialtyById({
                 id: id,
                 location: location
             });
 
-            if (res && res.errCode === 0) {
+            if (res?.errCode === 0) {
                 let data = res.data;
                 let arrDoctorId = [];
                 if (data && !_.isEmpty(res.data)) {
@@ -103,6 +111,9 @@ class DetailSpecialty extends Component {
                 })
 
             }
+            this.setState({
+                isLoading: false
+            })
         }
     }
 
@@ -111,7 +122,7 @@ class DetailSpecialty extends Component {
 
         console.log('hoi dan it channel check state: ', this.state)
         let { language } = this.props;
-        return (
+        return (<>
             <div className="detail-specialty-container">
                 <HomeHeader />
                 <div className="detail-specialty-body">
@@ -172,6 +183,12 @@ class DetailSpecialty extends Component {
                 </div>
 
             </div>
+            {this.state.isLoading && (<div className='container-ring'><div className="ring">Loading...
+                <span></span>
+            </div>
+            </div>)}
+            </>
+
         );
     }
 }

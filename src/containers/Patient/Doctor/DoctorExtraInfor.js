@@ -12,18 +12,25 @@ class DoctorExtraInfor extends Component {
         super(props);
         this.state = {
             isShowDetailInfor: false,
-            extraInfor: {}
+            extraInfor: {},
+            isLoading:false
         }
     }
 
     async componentDidMount() {
         if (this.props.doctorIdFromParent) {
+            this.setState ({
+                isLoading:true
+            })
             let res = await getExtraInforDoctorById(this.props.doctorIdFromParent);
-            if (res && res.errCode === 0) {
+            if (res?.errCode === 0) {
                 this.setState({
                     extraInfor: res.data
                 })
             }
+            this.setState ({
+                isLoading:false
+            })
         }
     }
 
@@ -33,12 +40,18 @@ class DoctorExtraInfor extends Component {
         }
 
         if (this.props.doctorIdFromParent !== prevProps.doctorIdFromParent) {
+            this.setState ({
+                isLoading:true
+            })
             let res = await getExtraInforDoctorById(this.props.doctorIdFromParent);
             if (res && res.errCode === 0) {
                 this.setState({
                     extraInfor: res.data
                 })
             }
+            this.setState ({
+                isLoading:false
+            })
         }
     }
 
@@ -52,6 +65,7 @@ class DoctorExtraInfor extends Component {
         let { isShowDetailInfor, extraInfor } = this.state;
         let { language } = this.props;
         return (
+            <>
             <div className="doctor-extra-infor-container">
                 <div className="content-up">
                     <div className="text-address">
@@ -156,6 +170,10 @@ class DoctorExtraInfor extends Component {
                     }
                 </div>
             </div>
+            {this.state.isLoading && (<div className='container-ring'><div className="ring">Loading...
+                        <span></span>
+                    </div></div>)}
+            </>
         );
     }
 }

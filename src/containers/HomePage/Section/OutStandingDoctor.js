@@ -10,7 +10,8 @@ class OutStandingDoctor extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            arrDoctors: []
+            arrDoctors: [],
+            isLoading:false
         }
     }
 
@@ -23,7 +24,13 @@ class OutStandingDoctor extends Component {
     }
 
     componentDidMount() {
+        this.setState({
+            isLoading: true
+        })
         this.props.loadTopDoctors();
+        this.setState({
+            isLoading: false
+        })
     }
 
     handleViewDetailDoctor = (doctor) => {
@@ -34,8 +41,9 @@ class OutStandingDoctor extends Component {
     render() {
         let arrDoctors = this.state.arrDoctors;
         let { language } = this.props;
+        console.log('show arrdoctors',arrDoctors)
         // arrDoctors = arrDoctors.concat(arrDoctors).concat(arrDoctors)
-        return (
+        return (<>
             <div className="section-share section-outstanding-doctor">
                 <div className="section-container">
                     <div className="section-header">
@@ -66,7 +74,7 @@ class OutStandingDoctor extends Component {
                                                 </div>
                                                 <div className="position text-center">
                                                     <div>{language === LANGUAGES.VI ? nameVi : nameEn}</div>
-                                                    <div>Cơ Xương Khớp</div>
+                                                    <div>Khoa {item?.Doctor_Infors?.nameSpecialtyData?.name}</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -77,6 +85,11 @@ class OutStandingDoctor extends Component {
                     </div>
                 </div>
             </div>
+            {this.state.isLoading && (<div className='container-ring'><div className="ring">Loading...
+            <span></span>
+        </div>
+        </div>)}
+        </>
         );
     }
 

@@ -11,15 +11,20 @@ class MedicalFacility extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dataClinics: []
+            dataClinics: [],
+            isLoading: false
         }
     }
 
     async componentDidMount() {
+        this.setState({
+            isLoading: true
+        })
         let res = await getAllClinic();
         if (res && res.errCode === 0) {
             this.setState({
-                dataClinics: res.data ? res.data : []
+                dataClinics: res.data ? res.data : [],
+                isLoading: false
             })
         }
     }
@@ -32,12 +37,14 @@ class MedicalFacility extends Component {
 
     render() {
         let { dataClinics } = this.state;
-        return (
+        return (<>
+
+
             <div className="section-share section-medical-facility">
                 <div className="section-container">
                     <div className="section-header">
-                        <span className="title-section">Cơ sở y tế nổi bật</span>
-                        <button className="btn-section">xem thêm</button>
+                        <span className="title-section"><FormattedMessage id="homepage.clinic" /></span>
+                        <button className="btn-section"><FormattedMessage id="homepage.more-infor" /></button>
                     </div>
                     <div className="section-body">
                         <Slider {...this.props.settings}>
@@ -63,6 +70,11 @@ class MedicalFacility extends Component {
                     </div>
                 </div>
             </div>
+            {this.state.isLoading && (<div className='container-ring'><div className="ring">Loading...
+                <span></span>
+            </div>
+            </div>)}
+        </>
         );
     }
 

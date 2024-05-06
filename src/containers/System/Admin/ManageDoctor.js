@@ -42,13 +42,20 @@ class ManageDoctor extends Component {
             addressClinic: '',
             note: '',
             clinicId: '',
-            specialtyId: ''
+            specialtyId: '',
+            isLoading:false
         }
     }
 
     componentDidMount() {
+        this.setState ({
+            isLoading:true
+        })
         this.props.fetchAllDoctors();
         this.props.getAllRequiredDoctorInfor();
+        this.setState ({
+            isLoading:false
+        })
     }
 
     buildDataInputSelect = (inputData, type) => {
@@ -160,7 +167,9 @@ class ManageDoctor extends Component {
 
     handleSaveContentMarkdown = () => {
         let { hasOldData } = this.state;
-
+        this.setState ({
+            isLoading:true
+        })
         this.props.saveDetailDoctor({
             contentHTML: this.state.contentHTML,
             contentMarkdown: this.state.contentMarkdown,
@@ -177,6 +186,9 @@ class ManageDoctor extends Component {
             clinicId: this.state.selectedClinic && this.state.selectedClinic.value ? this.state.selectedClinic.value : '',
             specialtyId: this.state.selectedSpecialty.value
         })
+        this.setState ({
+            isLoading:false
+        })
     }
 
 
@@ -184,7 +196,9 @@ class ManageDoctor extends Component {
     handleChangeSelect = async (selectedOption) => {
         this.setState({ selectedOption });
         let { listPayment, listPrice, listProvince, listSpecialty, listClinic } = this.state;
-
+        this.setState ({
+            isLoading:true
+        })
         let res = await getDetailInforDoctor(selectedOption.value);
         if (res && res.errCode === 0 && res.data && res.data.Markdown) {
             let markdown = res.data.Markdown;
@@ -194,15 +208,15 @@ class ManageDoctor extends Component {
                 selectedPayment = '', selectedPrice = '', selectedProvince = '', selectedClinic = '',
                 selectedSpecialty = '';
 
-            if (res.data.Doctor_Infor) {
-                addressClinic = res.data.Doctor_Infor.addressClinic;
-                nameClinic = res.data.Doctor_Infor.nameClinic;
-                note = res.data.Doctor_Infor.note;
-                paymentId = res.data.Doctor_Infor.paymentId;
-                priceId = res.data.Doctor_Infor.priceId;
-                provinceId = res.data.Doctor_Infor.provinceId;
-                specialtyId = res.data.Doctor_Infor.specialtyId;
-                clinicId = res.data.Doctor_Infor.clinicId;
+            if (res.data.Doctor_Infors) {
+                addressClinic = res.data.Doctor_Infors[0].addressClinic;
+                nameClinic = res.data.Doctor_Infors[0].nameClinic;
+                note = res.data.Doctor_Infors[0].note;
+                paymentId = res.data.Doctor_Infors[0].paymentId;
+                priceId = res.data.Doctor_Infors[0].priceId;
+                provinceId = res.data.Doctor_Infors[0].provinceId;
+                specialtyId = res.data.Doctor_Infors[0].specialtyId;
+                clinicId = res.data.Doctor_Infors[0].clinicId;
 
                 selectedPayment = listPayment.find(item => {
                     return item && item.value === paymentId
@@ -254,6 +268,9 @@ class ManageDoctor extends Component {
                 selectedClinic: ''
             })
         }
+        this.setState ({
+            isLoading:false
+        })
     };
 
 
@@ -275,7 +292,7 @@ class ManageDoctor extends Component {
     }
     render() {
         let { hasOldData, listSpecialty } = this.state;
-        return (
+        return (<>
             <div className="manage-doctor-container">
                 <div className="manage-doctor-title">
                     <FormattedMessage id="admin.manage-doctor.title" />
@@ -398,6 +415,10 @@ class ManageDoctor extends Component {
                     }
                 </button>
             </div>
+            {this.state.isLoading && (<div className='container-ring'><div className="ring">Loading...
+                        <span></span>
+                    </div></div>)}
+            </>
         );
     }
 

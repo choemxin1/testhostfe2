@@ -5,9 +5,51 @@ import logo from '../../assets/logo.svg';
 import { FormattedMessage } from 'react-intl';
 import { LANGUAGES } from "../../utils";
 import { withRouter } from 'react-router';
-import { changeLanguageApp } from "../../store/actions"
+import { changeLanguageApp } from "../../store/actions";
+import { getAllSpecialty } from '../../services/userService';
+import Select from 'react-select';
 
 class HomeHeader extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+
+            isMobile: true,
+            selectedOption: '',
+            listSpecialty: [],
+            selectedSpecialty:'',
+            isLoading:false
+
+        };
+        
+    }
+    async componentDidMount() {
+        
+        this.setState ({
+            isLoading:true
+        })
+        let res = await getAllSpecialty();
+        
+        let dataSelectSpecialty = this.buildDataInputSelect(res.data, 'SPECIALTY');
+
+        console.log('show listSpecialty',res)
+        if (res && res.errCode === 0) {
+            this.setState({
+                listSpecialty: dataSelectSpecialty,
+                isLoading:false
+            })
+        }
+
+    }
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        
+        if (prevProps.language !== this.props.language) {
+
+        }
+    }
+    componentWillUnmount() {
+        
+    }
 
     changeLanguage = (language) => {
         this.props.changeLanguageAppRedux(language)
@@ -18,14 +60,52 @@ class HomeHeader extends Component {
             this.props.history.push(`/home`)
         }
     }
+    
+    buildDataInputSelect = (inputData, type) => {
+        let result = [];
+        let { language } = this.props;
+        if (inputData && inputData.length > 0) {
+            
+
+            if (type === 'SPECIALTY') {
+                inputData.map((item, index) => {
+                    let object = {};
+                    object.label = item.name;
+                    object.value = item.id;
+                    result.push(object)
+                })
+            }
+
+            
+        }
+
+        return result;
+    }
+    handleChangeSelectDoctorInfor = (selectedOption, name) => {
+        let stateName = name.name;
+        let stateCopy = { ...this.state };
+        stateCopy[stateName] = selectedOption;
+        this.setState({
+            ...stateCopy
+        })
+        
+    }
+    handleKeyDown = (event) => {
+        if (event.key === 'Enter' || event.keyCode === 13) {
+            this.props.history.push(`/detail-specialty/${this.state.selectedSpecialty.value}`)
+        }
+    }
     render() {
         let language = this.props.language;
+        console.log('show chọn khoa',this.state.selectedSpecialty)
         return (
             <React.Fragment>
+
+                <>
                 <div className="home-header-container">
                     <div className="home-header-content">
                         <div className="left-content">
-                            <i className="fas fa-bars"></i>
+                            <i className="fas fa-bars" ></i>
                             <img className="header-logo" src={logo} onClick={() => this.returnToHome()} />
                         </div>
                         <div className="center-content">
@@ -46,6 +126,7 @@ class HomeHeader extends Component {
                                 <div className="subs-title"><FormattedMessage id="homeheader.check-health" /></div>
                             </div>
                         </div>
+
                         <div className="right-content">
                             <div className="support"><i className="fas fa-question-circle"></i>
                                 <FormattedMessage id="homeheader.support" />
@@ -66,14 +147,27 @@ class HomeHeader extends Component {
                         </div>
                     </div>
                 </div>
+                </>
                 {this.props.isShowBanner === true &&
                     <div className="home-header-banner">
                         <div className="content-up">
                             <div className="title1"><FormattedMessage id="banner.title1" /></div>
                             <div className="title2"><FormattedMessage id="banner.title2" /></div>
                             <div className="search">
-                                <i className="fas fa-search"></i>
-                                <input type="text" placeholder="Tìm chuyên khoa khám bệnh" />
+                                
+                                
+                                <Select
+                                    value={this.state.selectedSpecialty}
+                                    options={this.state.listSpecialty}
+                                    placeholder={
+                                     <FormattedMessage id="admin.manage-doctor.specialty" />
+                                }
+                                    onChange={this.handleChangeSelectDoctorInfor}
+                                    name="selectedSpecialty"
+                                    className='selectedSpecialty'
+                                    onKeyDown={(event) => this.handleKeyDown(event)}
+
+                                />
                             </div>
                         </div>
                         <div className="content-down">
@@ -106,6 +200,10 @@ class HomeHeader extends Component {
                         </div>
                     </div>
                 }
+                {this.state.isLoading && (<div className='container-ring'><div className="ring">Loading...
+                        <span></span>
+                    </div></div>)}
+                
             </React.Fragment>
         );
     }
@@ -117,6 +215,7 @@ const mapStateToProps = state => {
         isLoggedIn: state.user.isLoggedIn,
         userInfo: state.user.userInfo,
         language: state.app.language,
+        allRequiredDoctorInfor: state.admin.allRequiredDoctorInfor
     };
 };
 

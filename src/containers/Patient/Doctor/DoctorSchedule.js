@@ -16,7 +16,8 @@ class DoctorSchedule extends Component {
             allDays: [],
             allAvalableTime: [],
             isOpenModalBooking: false,
-            dataScheduleTimeModal: {}
+            dataScheduleTimeModal: {},
+            isLoading: false,
         }
     }
 
@@ -25,9 +26,13 @@ class DoctorSchedule extends Component {
         let allDays = this.getArrDays(language);
 
         if (this.props.doctorIdFromParent) {
+            this.setState ({
+                isLoading:true
+            })
             let res = await getScheduleDoctorByDate(this.props.doctorIdFromParent, allDays[0].value);
             this.setState({
-                allAvalableTime: res.data ? res.data : []
+                allAvalableTime: res.data ? res.data : [],
+                isLoading:false
             })
         }
 
@@ -81,9 +86,13 @@ class DoctorSchedule extends Component {
         }
         if (this.props.doctorIdFromParent !== prevProps.doctorIdFromParent) {
             let allDays = this.getArrDays(this.props.language);
+            this.setState ({
+                isLoading:true
+            })
             let res = await getScheduleDoctorByDate(this.props.doctorIdFromParent, allDays[0].value);
             this.setState({
-                allAvalableTime: res.data ? res.data : []
+                allAvalableTime: res.data ? res.data : [],
+                isLoading:false
             })
         }
     }
@@ -91,12 +100,16 @@ class DoctorSchedule extends Component {
     handleOnChangeSelect = async (event) => {
         if (this.props.doctorIdFromParent && this.props.doctorIdFromParent !== -1) {
             let doctorId = this.props.doctorIdFromParent;
-            let date = event.target.value
+            let date = event.target.value;
+            this.setState ({
+                isLoading:true
+            })
             let res = await getScheduleDoctorByDate(doctorId, date);
 
             if (res && res.errCode === 0) {
                 this.setState({
-                    allAvalableTime: res.data ? res.data : []
+                    allAvalableTime: res.data ? res.data : [],
+                    isLoading:false
                 })
             }
 
@@ -186,6 +199,9 @@ class DoctorSchedule extends Component {
                     closeBookingClose={this.closeBookingClose}
                     dataTime={dataScheduleTimeModal}
                 />
+                {this.state.isLoading && (<div className='container-ring'><div className="ring">Loading...
+                        <span></span>
+                    </div></div>)}
             </>
         );
     }

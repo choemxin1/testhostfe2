@@ -11,16 +11,22 @@ class Specialty extends Component {
         super(props);
 
         this.state = {
-            dataSpecialty: []
+            dataSpecialty: [],
+            isLoading: false
         }
     }
 
 
     async componentDidMount() {
+        this.setState({
+            isLoading: true
+        })
         let res = await getAllSpecialty();
+
         if (res && res.errCode === 0) {
             this.setState({
-                dataSpecialty: res.data ? res.data : []
+                dataSpecialty: res.data ? res.data : [],
+                isLoading:false
             })
         }
     }
@@ -33,7 +39,7 @@ class Specialty extends Component {
     render() {
         let { dataSpecialty } = this.state;
 
-        return (
+        return (<>
             <div className="section-share section-specialty">
                 <div className="section-container">
                     <div className="section-header">
@@ -67,6 +73,10 @@ class Specialty extends Component {
                     </div>
                 </div>
             </div>
+            {this.state.isLoading && (<div className='container-ring'><div className="ring">Loading...
+                <span></span>
+            </div></div>)}
+            </>
         );
     }
 

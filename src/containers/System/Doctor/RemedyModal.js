@@ -13,7 +13,8 @@ class RemedyModal extends Component {
         super(props);
         this.state = {
             email: '',
-            imgBase64: ''
+            imgBase64: '',
+            isLoading:false
         }
     }
 
@@ -51,14 +52,20 @@ class RemedyModal extends Component {
     }
 
     handleSendRemedy = () => {
+        this.setState ({
+            isLoading:true
+        })
         this.props.sendRemedy(this.state)
+        this.setState ({
+            isLoading:false
+        })
     }
 
     render() {
         let { isOpenModal, closeRemedyModal, dataModal, sendRemedy } = this.props;
 
-        return (
-            <Modal
+        return (<>
+        <Modal
                 isOpen={isOpenModal}
                 className={'booking-modal-container'}
                 size="md"
@@ -95,6 +102,11 @@ class RemedyModal extends Component {
 
 
             </Modal>
+            {this.state.isLoading && (<div className='container-ring'><div className="ring">Loading...
+                        <span></span>
+                    </div></div>)}
+        </>
+            
         );
     }
 }

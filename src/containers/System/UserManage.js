@@ -15,12 +15,19 @@ class UserManage extends Component {
             arrUsers: [],
             isOpenModalUser: false,
             isOpenModalEditUser: false,
-            userEdit: {}
+            userEdit: {},
+            isLoading:false
         }
     }
 
     async componentDidMount() {
+        this.setState ({
+            isLoading:true
+        })
         await this.getAllUsersFromReact();
+        this.setState ({
+            isLoading:false
+        })
     }
 
     getAllUsersFromReact = async () => {
@@ -52,6 +59,9 @@ class UserManage extends Component {
 
     createNewuser = async (data) => {
         try {
+            this.setState ({
+                isLoading:true
+            })
             let response = await createNewUserService(data);
             if (response && response.errCode !== 0) {
                 alert(response.errMessage)
@@ -66,10 +76,16 @@ class UserManage extends Component {
         } catch (e) {
             console.log(e)
         }
+        this.setState ({
+            isLoading:false
+        })
     }
 
     handleDeleteUser = async (user) => {
         try {
+            this.setState ({
+                isLoading:true
+            })
             let res = await deteleUserService(user.id);
             if (res && res.errCode === 0) {
                 await this.getAllUsersFromReact();
@@ -80,6 +96,9 @@ class UserManage extends Component {
         } catch (e) {
             console.log(e);
         }
+        this.setState ({
+            isLoading:false
+        })
     }
 
     handleEditUser = (user) => {
@@ -92,6 +111,9 @@ class UserManage extends Component {
 
     doEditUser = async (user) => {
         try {
+            this.setState ({
+                isLoading:true
+            })
             let res = await editUserService(user);
             if (res && res.errCode === 0) {
                 this.setState({
@@ -105,20 +127,19 @@ class UserManage extends Component {
         } catch (e) {
             console.log(e)
         }
+        this.setState ({
+            isLoading:false
+        })
     }
 
-    /** Life cycle
-     *  Run component: 
-     * 1. Run construct -> init state
-     * 2. Did mount (set state) : born ; unmount
-     * 3. Render (re-render)
-     * 
-     */
+    
     render() {
         let arrUsers = this.state.arrUsers;
         console.log(arrUsers)
         //properties ; nested
-        return (
+        return (<>
+
+
             <div className="users-container">
                 <ModalUser
                     isOpen={this.state.isOpenModalUser}
@@ -173,6 +194,11 @@ class UserManage extends Component {
                     </table>
                 </div>
             </div>
+            {this.state.isLoading && (<div className='container-ring'><div className="ring">Loading...
+                <span></span>
+            </div></div>)}
+
+        </>
         );
     }
 

@@ -58,13 +58,53 @@
     "homepage": {
         "outstanding-doctor": "Bác sĩ nổi bật tuần qua",
         "more-infor": "Xem thêm",
-        "specialty-poplular": "Chuyên khoa phổ biến"
+        "specialty-poplular": "Chuyên khoa phổ biến",
+        "clinic":"Cơ sở y tế nổi bật",
+        "handbook":"Cẩm nang"
     },
     "manage-schedule": {
         "title": "Quản lý kế hoạch khám bệnh của bác sĩ",
         "choose-doctor": "Chọn bác sĩ",
         "choose-date": "Chọn ngày",
         "save": "Lưu thông tin"
+    },
+    "manage-patient": {
+        "title": "Quản lý bệnh nhân khám bệnh",
+        "choose-date": "Chọn ngày khám",
+        "numerical-order":"STT",
+        "Time":"Thời gian",
+        "Name":"Họ và tên",
+        "Address":"Địa chỉ",
+        "Gender":"Giới tính"
+
+    },
+    "manage-clinic": {
+        "title": "Quản lý phòng khám",
+        
+        "image":"Ảnh phòng khám",
+        "name":"Tên phòng khám",
+        "address":"Địa chỉ phòng khám",
+        "add": "Tạo thông tin"
+
+    },
+    "manage-specialty": {
+        "title": "Quản lý chuyên khoa",
+        
+        "image":"Ảnh chuyên khoa",
+        "name":"Tên chuyên khoa",
+        
+        "add": "Tạo thông tin"
+
+    },
+    
+    "manage-handbook": {
+        "title": "Quản lý cẩm nang",
+        
+        "image":"Ảnh cẩm nang",
+        "name":"Tên cẩm nang",
+        
+        "add": "Tạo thông tin"
+
     },
     "patient": {
         "detail-doctor": {

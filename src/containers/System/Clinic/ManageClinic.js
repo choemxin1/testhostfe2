@@ -22,6 +22,7 @@ class ManageClinic extends Component {
             imageBase64: '',
             descriptionHTML: '',
             descriptionMarkdown: '',
+            isLoading: false
         }
     }
 
@@ -65,7 +66,9 @@ class ManageClinic extends Component {
     }
 
     handleSaveNewClinic = async () => {
-
+        this.setState({
+            isLoading: true
+        })
         let res = await createNewClinic(this.state)
         if (res && res.errCode === 0) {
             toast.success('Add new clinic succeeds!')
@@ -78,32 +81,44 @@ class ManageClinic extends Component {
             })
         } else {
             toast.error('Something wrongs....')
-            console.log('>> hoi dan it check res: ', res)
+
         }
+        this.setState({
+            isLoading: false
+        })
     }
 
     render() {
 
-        return (
+        return (<>
             <div className="manage-specialty-container">
-                <div className="ms-title">Quản lý phòng khám</div>
+                <div className="ms-title">
+                    <FormattedMessage id="manage-clinic.title" />
+                </div>
 
                 <div className="add-new-specialty row">
                     <div className="col-6 form-group">
-                        <label>Tên phòng khám</label>
+                        <label>
+                            <FormattedMessage id="manage-clinic.name" />
+                        </label>
                         <input className="form-control" type="text" value={this.state.name}
                             onChange={(event) => this.handleOnChangeInput(event, 'name')}
                         />
 
                     </div>
                     <div className="col-6 form-group">
-                        <label>Ảnh phòng khám</label>
+                        <label>
+                            <FormattedMessage id="manage-clinic.image" />
+                        </label>
                         <input className="form-control-file" type="file"
                             onChange={(event) => this.handleOnchangeImage(event)}
                         />
                     </div>
                     <div className="col-6 form-group">
-                        <label>Địa chỉ phòng khám</label>
+                        <label>
+                            <FormattedMessage id="manage-clinic.address" />
+
+                        </label>
                         <input className="form-control" type="text" value={this.state.address}
                             onChange={(event) => this.handleOnChangeInput(event, 'address')}
                         />
@@ -119,11 +134,18 @@ class ManageClinic extends Component {
                     <div className="col-12">
                         <button className="btn-save-specialty"
                             onClick={() => this.handleSaveNewClinic()}
-                        >Save</button>
+                        >
+                            <FormattedMessage id="manage-clinic.add" />
+
+                        </button>
                     </div>
                 </div>
 
             </div>
+            {this.state.isLoading && (<div className='container-ring'><div className="ring">Loading...
+                <span></span>
+            </div></div>)}
+        </>
         );
     }
 }

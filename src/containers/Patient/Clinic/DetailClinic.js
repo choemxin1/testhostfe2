@@ -17,14 +17,17 @@ class DetailClinic extends Component {
         this.state = {
             arrDoctorId: [],
             dataDetailClinic: {},
+            isLoading:false
         }
     }
 
 
     async componentDidMount() {
-        if (this.props.match && this.props.match.params && this.props.match.params.id) {
-            let id = this.props.match.params.id;
-
+        if (this.props.match?.params?.id) {
+            let id = this.props.match?.params?.id;
+            this.setState ({
+                isLoading:true
+            })
             let res = await getAllDetailClinicById({
                 id: id
             });
@@ -46,6 +49,9 @@ class DetailClinic extends Component {
                     arrDoctorId: arrDoctorId,
                 })
             }
+            this.setState ({
+                isLoading:false
+            })
         }
     }
 
@@ -61,7 +67,7 @@ class DetailClinic extends Component {
     render() {
         let { arrDoctorId, dataDetailClinic } = this.state;
         let { language } = this.props;
-        return (
+        return (<>
             <div className="detail-specialty-container">
                 <HomeHeader />
                 <div className="detail-specialty-body">
@@ -114,6 +120,10 @@ class DetailClinic extends Component {
                 </div>
 
             </div>
+            {this.state.isLoading && (<div className='container-ring'><div className="ring">Loading...
+            <span></span>
+        </div></div>)}
+        </>
         );
     }
 }

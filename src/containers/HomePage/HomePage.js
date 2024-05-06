@@ -13,19 +13,40 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 class HomePage extends Component {
-
+    constructor(props) {
+        super(props);
+        this.state = {
+            
+            windowWidth: window.innerWidth,
+            
+        };this.handleResize = this.handleResize.bind(this);
+    }
+    componentDidMount() {
+        this.handleResize();
+        window.addEventListener('resize', this.handleResize);
+    }
+    componentWillUnmount() {
+        // Xóa event listener khi component bị unmount để tránh memory leak
+        //window.innerWidth
+        window.removeEventListener('resize', this.handleResize);
+    }
+    handleResize = () => {
+        this.setState({ windowWidth: window.innerWidth });
+    }
     render() {
         let settings = {
             dots: false,
             infinite: false,
             speed: 500,
-            slidesToShow: 4,
+            slidesToShow: (this.state.windowWidth - 376) / 278,
             slidesToScroll: 1,
         };
 
         return (
             <div>
-                <HomeHeader isShowBanner={true} />
+                <HomeHeader isShowBanner={true} 
+                />
+                
                 <Specialty
                     settings={settings}
                 />

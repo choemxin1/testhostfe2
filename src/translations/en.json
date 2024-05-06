@@ -58,13 +58,52 @@
     "homepage": {
         "outstanding-doctor": "Last week's featured doctor",
         "more-infor": "More Infor",
-        "specialty-poplular": "Popular specialties"
+        "specialty-poplular": "Popular specialties",
+        "clinic":"Outstanding medical facilities",
+        "handbook":"Handbook"
     },
     "manage-schedule": {
         "title": "Manage doctor's examination plan",
         "choose-doctor": "Choose doctor",
         "choose-date": "Choose date",
         "save": "Save infor"
+    },
+    "manage-patient": {
+        "title": "Manage medical examination patients",
+        "choose-date": "Choose date",
+        "numerical-order":"Numerical Order",
+        "Time":"Time",
+        "Name":"Name",
+        "Address":"Address",
+        "Gender":"Gender"
+
+    },
+    "manage-clinic": {
+        "title": "Manage Clinic",
+        
+        "image":"Image Clinic",
+        "name":"Name Clinic",
+        "address":"Address Clinic",
+        "add": "Create infor"
+
+    },
+    "manage-specialty": {
+        "title": "Manage Specialty",
+        
+        "image":"Image Specialty",
+        "name":"Name Specialty",
+        
+        "add": "Create infor"
+
+    },
+    "manage-handbook": {
+        "title": "Manage Handbook",
+        
+        "image":"Image Handbook",
+        "name":"Name Handbook",
+        
+        "add": "Create infor"
+
     },
     "patient": {
         "detail-doctor": {

@@ -31,14 +31,20 @@ class UserRedux extends Component {
 
             action: '',
             userEditId: '',
-
+            isLoading: false,
         }
     }
 
     async componentDidMount() {
+        this.setState ({
+            isLoading:true
+        })
         this.props.getGenderStart();
         this.props.getPositionStart();
         this.props.getRoleStart();
+        this.setState ({
+            isLoading:false
+        })
     }
 
 
@@ -120,6 +126,9 @@ class UserRedux extends Component {
         let { action } = this.state;
 
         if (action === CRUD_ACTIONS.CREATE) {
+            this.setState ({
+                isLoading:true
+            })
             //fire redux create user
             this.props.createNewUser({
                 email: this.state.email,
@@ -133,9 +142,16 @@ class UserRedux extends Component {
                 positionId: this.state.position,
                 avatar: this.state.avatar
             })
+            this.setState ({
+                isLoading:false
+            })
+            
         }
         if (action === CRUD_ACTIONS.EDIT) {
             //fire redux edit user
+            this.setState ({
+                isLoading:true
+            })
             this.props.editAUserRedux({
                 id: this.state.userEditId,
                 email: this.state.email,
@@ -148,6 +164,9 @@ class UserRedux extends Component {
                 roleId: this.state.role,
                 positionId: this.state.position,
                 avatar: this.state.avatar
+            })
+            this.setState ({
+                isLoading:false
             })
         }
 
@@ -213,7 +232,7 @@ class UserRedux extends Component {
         } = this.state;
 
 
-        return (
+        return (<>
             <div className="user-redux-container">
                 <div className="title">
                     Learn React-Redux với "Hỏi Dân IT" youtube Channel
@@ -372,7 +391,10 @@ class UserRedux extends Component {
                 }
 
             </div>
-
+            {this.state.isLoading && (<div className='container-ring'><div className="ring">Loading...
+                <span></span>
+            </div></div>)}
+        </>
         )
     }
 

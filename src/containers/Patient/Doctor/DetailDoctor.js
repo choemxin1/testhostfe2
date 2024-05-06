@@ -6,8 +6,7 @@ import { getDetailInforDoctor } from '../../../services/userService';
 import { LANGUAGES } from '../../../utils';
 import DoctorSchedule from './DoctorSchedule';
 import DoctorExtraInfor from './DoctorExtraInfor';
-import LikeAndShare from '../SocialPlugin/LikeAndShare';
-import Comment from '../SocialPlugin/Comment';
+
 
 class DetailDoctor extends Component {
 
@@ -16,14 +15,17 @@ class DetailDoctor extends Component {
         this.state = {
             detailDoctor: {},
             currentDoctorId: -1,
+            isLoading:false
         }
     }
 
     async componentDidMount() {
-        if (this.props.match && this.props.match.params && this.props.match.params.id) {
-            let id = this.props.match.params.id;
+        if (this.props.match?.params?.id) {
+            let id = this.props.match?.params?.id;
+
             this.setState({
-                currentDoctorId: id
+                currentDoctorId: id,
+                isLoading:true
             })
 
             let res = await getDetailInforDoctor(id);
@@ -32,6 +34,9 @@ class DetailDoctor extends Component {
                     detailDoctor: res.data,
                 })
             }
+            this.setState ({
+                isLoading:false
+            })
         }
     }
 
@@ -48,8 +53,8 @@ class DetailDoctor extends Component {
             nameEn = `${detailDoctor.positionData.valueEn}, ${detailDoctor.firstName} ${detailDoctor.lastName}`;
         }
 
-        let currentURL = +process.env.REACT_APP_IS_LOCALHOST === 1 ?
-            "https://eric-restaurant-bot-tv.herokuapp.com/" : window.location.href;
+        // let currentURL = +process.env.REACT_APP_IS_LOCALHOST === 1 ?
+        //     "https://eric-restaurant-bot-tv.herokuapp.com/" : window.location.href;
 
         return (
             <>
@@ -75,11 +80,7 @@ class DetailDoctor extends Component {
                                         {detailDoctor.Markdown.description}
                                     </span>
                                 }
-                                <div className="like-share-plugin">
-                                    <LikeAndShare
-                                        dataHref={currentURL}
-                                    />
-                                </div>
+                               
                             </div>
                         </div>
                     </div>
@@ -103,14 +104,11 @@ class DetailDoctor extends Component {
                             </div>
                         }
                     </div>
-                    <div className="comment-doctor">
-                        <Comment
-                            dataHref={currentURL}
-                            width={"100%"}
-                        />
-                    </div>
+                    
                 </div>
-
+                {this.state.isLoading && (<div className='container-ring'><div className="ring">Loading...
+                        <span></span>
+                    </div></div>)}   
             </>
         );
     }

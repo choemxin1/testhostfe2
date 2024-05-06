@@ -25,7 +25,7 @@ class VerifyEmail extends Component {
                 doctorId: doctorId
             })
 
-            if (res && res.errCode === 0) {
+            if (res?.errCode === 0) {
                 this.setState({
                     statusVerify: true,
                     errCode: res.errCode

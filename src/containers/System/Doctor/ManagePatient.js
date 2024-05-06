@@ -19,12 +19,18 @@ class ManagePatient extends Component {
             dataPatient: [],
             isOpenRemedyModal: false,
             dataModal: {},
-            isShowLoading: false
+            isLoading: false
         }
     }
 
     async componentDidMount() {
+        this.setState ({
+            isLoading:true
+        })
         this.getDataPatient()
+        this.setState ({
+            isLoading:false
+        })
     }
 
     getDataPatient = async () => {
@@ -54,7 +60,13 @@ class ManagePatient extends Component {
         this.setState({
             currentDate: date[0]
         }, async () => {
+            this.setState ({
+                isLoading:true
+            })
             await this.getDataPatient()
+            this.setState ({
+                isLoading:false
+            })
         })
     }
 
@@ -83,7 +95,7 @@ class ManagePatient extends Component {
     sendRemedy = async (dataChild) => {
         let { dataModal } = this.state;
         this.setState({
-            isShowLoading: true
+            isLoading: true
         })
 
         let res = await postSendRemedy({
@@ -98,15 +110,16 @@ class ManagePatient extends Component {
 
 
         if (res && res.errCode === 0) {
-            this.setState({
-                isShowLoading: false
-            })
-            toast.success('Send Remedy succeeds:');
+            
             this.closeRemedyModal();
             await this.getDataPatient();
+            this.setState({
+                isLoading: false
+            })
+            toast.success('Send Remedy succeeds:');
         } else {
             this.setState({
-                isShowLoading: false
+                isLoading: false
             })
             toast.error('Something wrongs....');
             console.log('error send remedy: ', res)
@@ -118,18 +131,17 @@ class ManagePatient extends Component {
         let { language } = this.props;
         return (
             <>
-                <LoadingOverlay
-                    active={this.state.isShowLoading}
-                    spinner
-                    text='Loading...'
-                >
+                
                     <div className="manage-patient-container">
                         <div className="m-p-title">
-                            Quản lý bệnh nhân khám bệnh
+                        <FormattedMessage id="manage-patient.title" />
                         </div>
                         <div className="manage-patient-body row">
                             <div className="col-4 form-group">
-                                <label>Chọn ngày khám</label>
+                                <label>
+                                <FormattedMessage id="manage-patient.choose-date" />
+
+                                </label>
                                 <DatePicker
                                     onChange={this.handleOnchangeDatePicker}
                                     className="form-control"
@@ -141,11 +153,13 @@ class ManagePatient extends Component {
                                 <table style={{ width: '100%' }} >
                                     <tbody>
                                         <tr>
-                                            <th>STT</th>
-                                            <th>Thời gian</th>
-                                            <th>Họ và tên</th>
-                                            <th>Địa chỉ</th>
-                                            <th>Giới tính</th>
+                                            <th>
+                                                <FormattedMessage id="manage-patient.numerical-order" />
+                                                </th>
+                                            <th><FormattedMessage id="manage-patient.Time" /></th>
+                                            <th><FormattedMessage id="manage-patient.Name" /></th>
+                                            <th><FormattedMessage id="manage-patient.Address" /></th>
+                                            <th><FormattedMessage id="manage-patient.Gender" /></th>
                                             <th>Actions</th>
                                         </tr>
                                         {dataPatient && dataPatient.length > 0 ?
@@ -191,8 +205,10 @@ class ManagePatient extends Component {
                         closeRemedyModal={this.closeRemedyModal}
                         sendRemedy={this.sendRemedy}
                     />
-
-                </LoadingOverlay>
+                    {this.state.isLoading && (<div className='container-ring'><div className="ring">Loading...
+                        <span></span>
+                    </div></div>)}
+               
             </>
         );
     }
