@@ -49,7 +49,11 @@ class ProfileDoctor extends Component {
         if (this.props.doctorId !== prevProps.doctorId) {
             // this.getInforDoctor(this.props.doctorId)
         }
-
+        if( this.state.dataProfile !== prevState.dataProfile) {
+            this.setState({
+                dataProfile: this.state.dataProfile
+            })
+        }
     }
 
     renderTimeBooking = (dataTime) => {
