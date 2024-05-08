@@ -84,7 +84,7 @@ class ProfileDoctor extends Component {
             nameVi = `${dataProfile.positionData.valueVi}, ${dataProfile.lastName} ${dataProfile.firstName} `;
             nameEn = `${dataProfile.positionData.valueEn}, ${dataProfile.firstName} ${dataProfile.lastName}`;
         }
-
+console.log('tttttttttttt',dataProfile)
         return (<>
             <div className="profile-doctor-container">
                 <div className="intro-doctor">
@@ -130,10 +130,10 @@ class ProfileDoctor extends Component {
                 {isShowPrice === true &&
                     <div className="price">
                         <FormattedMessage id="patient.booking-modal.price" />
-                        {dataProfile && dataProfile.Doctor_Infor && language === LANGUAGES.VI &&
+                        {dataProfile && dataProfile.Doctor_Infors && language === LANGUAGES.VI &&
                             <NumberFormat
                                 className="currency"
-                                value={dataProfile.Doctor_Infor.priceTypeData.valueVi}
+                                value={dataProfile.Doctor_Infors[0].priceTypeData.valueVi}
                                 displayType={'text'}
                                 thousandSeparator={true}
                                 suffix={'VND'}
@@ -143,7 +143,7 @@ class ProfileDoctor extends Component {
                         {dataProfile && dataProfile.Doctor_Infor && language === LANGUAGES.EN &&
                             <NumberFormat
                                 className="currency"
-                                value={dataProfile.Doctor_Infor.priceTypeData.valueEn}
+                                value={dataProfile.Doctor_Infors[0].priceTypeData.valueEn}
                                 displayType={'text'}
                                 thousandSeparator={true}
                                 suffix={'$'}
