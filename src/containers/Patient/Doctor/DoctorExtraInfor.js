@@ -18,7 +18,7 @@ class DoctorExtraInfor extends Component {
     }
 
     async componentDidMount() {
-        if (this.props.doctorIdFromParent) {
+        if (this.props.doctorIdFromParent && this.props.doctorIdFromParent !== -1) {
             this.setState ({
                 isLoading:true
             })
